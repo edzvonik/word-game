@@ -25,6 +25,16 @@ public class Words {
         return words.get(randomNumber(words.size() - 1));
     }
 
+    public StringBuilder encryptWord(String word) {
+        StringBuilder encryptedWord = new StringBuilder(word);
+
+        for (int i = 0; i < word.length(); i++) {
+            encryptedWord.setCharAt(i, 'x');
+        }
+
+        return encryptedWord;
+    }
+
     private int randomNumber(int upperBound) {
         Random random = new Random();
         return random.nextInt(upperBound) + 1;

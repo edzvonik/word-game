@@ -16,6 +16,7 @@ public class Game {
 
     public Game() {
         Words words = new Words();
+        this.renderer = new Renderer();
         this.word = words.getRandom();
         this.currentWordState = words.encryptWord(word);
         this.mistakes = 0;
@@ -29,17 +30,28 @@ public class Game {
 
         switch (input) {
             case "start":
-                System.out.println("New game begin\n------------");
+                System.out.println(word);
+                System.out.println("New game begin");
+                System.out.println("+--+--+--+");
                 printGameState();
-                
-                while (mistakes < 3) {
-                    
-                    char inputLetter = renderer.getGuess();
 
-                    if (usedLetters.get(inputLetter) == true)
-                        ;
+                while (mistakes < 3) {
+                    char inputLetter = renderer.getGuess();
+                    System.out.println("+--+--+--+");
+
+                    if (usedLetters.get(inputLetter) == true) {
+                        System.out.println("This letter already exist. Input other letter");
+                        mistakes++;
+                        inputLetter = renderer.getGuess();
+                        System.out.println("+--+--+--+");
+                    }
+
+                    makeGuess(inputLetter);
                     printGameState();
+                    isGameOver();
                 }
+
+                break;
 
             case "exit":
                 System.out.println("You`re exit");
@@ -56,26 +68,17 @@ public class Game {
     }
 
     public void makeGuess(char letter) {
-        char inputLetter;
-
-        inputLetter = renderer.getGuess();
-
-        if (usedLetters.get(inputLetter) == true) {
-            System.out.println("This letter already exist. Input other letter");
-            inputLetter = renderer.getGuess();
-        }
-
-        List<Integer> occurences = findLetterOccurrences(word, inputLetter);
+        List<Integer> occurences = findLetterOccurrences(word, letter);
 
         if (occurences.size() == 0) {
-            mistakes--;
-            printGameState();
+            mistakes++;
         }
 
         for (Integer occurence : occurences) {
-            currentWordState.setCharAt(occurence, inputLetter);
+            currentWordState.setCharAt(occurence, letter);
         }
-        usedLetters.put(inputLetter, true);
+
+        usedLetters.put(letter, true);
     }
 
     public void isGameOver() {
@@ -84,12 +87,6 @@ public class Game {
         } else if (word.equals(currentWordState.toString())) {
             System.out.println("You`re win!");
         }
-        // Words words = new Words();
-        // word = words.getRandom();
-        // mistakes = 0;
-        // usedLetters = initUsedLetters();
-
-        // System.out.println("Game over");
     }
 
     private Map<Character, Boolean> initUsedLetters() {
@@ -104,11 +101,13 @@ public class Game {
 
     public static List<Integer> findLetterOccurrences(String word, char letter) {
         List<Integer> occurrences = new ArrayList<>();
+
         for (int i = 0; i < word.length(); i++) {
             if (word.charAt(i) == letter) {
                 occurrences.add(i);
             }
         }
+
         return occurrences;
     }
 

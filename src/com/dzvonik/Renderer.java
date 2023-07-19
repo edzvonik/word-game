@@ -18,8 +18,8 @@ public class Renderer {
             "next", "Введите букву: ",
             "gameover", "Игра окончена!");
 
-    public Renderer(String word) {
-        this.word = word;
+    public Renderer() {
+        // this.word = word;
     }
 
     public void word(String word) {
@@ -46,9 +46,9 @@ public class Renderer {
     }
 
     public char getGuess() {
-        System.out.println("Input letter: ");
+        System.out.print("Input letter: ");
         Scanner in = new Scanner(System.in);
-        return (char) in.nextInt();
+        return in.next().charAt(0);
     }
 
 }

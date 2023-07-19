@@ -16,6 +16,7 @@ public class Words {
         Path path = Paths.get(PATH);
         try {
             words = Files.readAllLines(path);
+            words.replaceAll(s -> s.toLowerCase());;
         } catch (IOException e) {
             e.printStackTrace();
         }

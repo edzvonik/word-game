@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Game {
 
@@ -24,47 +23,37 @@ public class Game {
     }
 
     public void startGame() {
-        Scanner in = new Scanner(System.in);
-        System.out.println("Enter \"start\" or \"exit\"");
-        String input = in.nextLine();
+        String input = renderer.getInput();
 
         switch (input) {
             case "start":
-                System.out.println(word);
-                System.out.println("New game begin");
-                System.out.println("+--+--+--+");
-                printGameState();
+                renderer.printStartGame(mistakes, currentWordState.toString());
 
                 while (mistakes < 3) {
                     char inputLetter = renderer.getGuess();
-                    System.out.println("+--+--+--+");
+                    renderer.printDelimiter();
 
                     if (usedLetters.get(inputLetter) == true) {
-                        System.out.println("This letter already exist. Input other letter");
+                        renderer.printExistLetter();
                         mistakes++;
                         inputLetter = renderer.getGuess();
-                        System.out.println("+--+--+--+");
+
                     }
 
                     makeGuess(inputLetter);
-                    printGameState();
-                    isGameOver();
+                    renderer.printGameState(mistakes, currentWordState.toString());
+
+                    renderer.printLoseOrWin(isGameOver());
                 }
 
                 break;
-
             case "exit":
                 System.out.println("You`re exit");
                 break;
-
             default:
                 break;
         }
-    }
 
-    public void printGameState() {
-        System.out.println("Mistakes (max 3): " + mistakes);
-        System.out.println("Word: " + currentWordState);
     }
 
     public void makeGuess(char letter) {
@@ -81,12 +70,14 @@ public class Game {
         usedLetters.put(letter, true);
     }
 
-    public void isGameOver() {
+    public int isGameOver() {
         if (mistakes == 3) {
-            System.out.println("Your loose!");
+            return -1; // loss
         } else if (word.equals(currentWordState.toString())) {
-            System.out.println("You`re win!");
+            return 1; // win
         }
+
+        return 0; // other
     }
 
     private Map<Character, Boolean> initUsedLetters() {
@@ -99,7 +90,7 @@ public class Game {
         return usedLetters;
     }
 
-    public static List<Integer> findLetterOccurrences(String word, char letter) {
+    public List<Integer> findLetterOccurrences(String word, char letter) {
         List<Integer> occurrences = new ArrayList<>();
 
         for (int i = 0; i < word.length(); i++) {

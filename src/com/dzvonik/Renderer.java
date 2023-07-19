@@ -1,54 +1,46 @@
 package com.dzvonik;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Renderer {
 
-    private String word;
-    private List<String> gibbets = Arrays.asList(
-            "   ========\n",
-            "        |\n        |\n        |\n        |\n        |\n   ========\n",
-            "    +---+\n        |\n        |\n        |\n        |\n        |\n   ========\n",
-            "    +---+\n    |   |\n    O   |\n        |\n        |\n        |\n   ========\n");
-    private Map<String, String> phrases = Map.of(
-            "hello", "Игра началась!",
-            "next", "Введите букву: ",
-            "gameover", "Игра окончена!");
-
-    public Renderer() {
-        // this.word = word;
+    public void printStartGame(int mistakes, String currentWordState) {
+        System.out.println("New game begin");
+        printDelimiter();
+        printGameState(mistakes, currentWordState);
     }
 
-    public void word(String word) {
-        System.out.printf(
-                "+---+---+---+\n" +
-                        "| %s | %s | %s |\n" +
-                        "+---+---+---+\n",
-                word.charAt(0), word.charAt(1), word.charAt(2));
+    public void printDelimiter() {
+        System.out.println("+--+--+--+");
     }
 
-    public void gibbet() {
-        System.out.println(
-                "         \n" +
-                        "         \n" +
-                        "         \n" +
-                        "         \n" +
-                        "         \n" +
-                        "         \n" +
-                        "   ========\n");
+    public void printExistLetter() {
+        System.out.println("This letter already exist. Input other letter");
     }
 
-    public void hello() {
-        System.out.println("Игра началась!");
+    public void printLoseOrWin(int state) {
+        if (state == -1) {
+            System.out.println("You`re lose!");
+        } else if (state == 1) {
+            System.out.println("You`re win!");
+        }
+    }
+
+    public void printGameState(int mistakes, String currentWordState) {
+        System.out.println("Mistakes (max 3): " + mistakes);
+        System.out.println("Word: " + currentWordState);
     }
 
     public char getGuess() {
         System.out.print("Input letter: ");
         Scanner in = new Scanner(System.in);
         return in.next().charAt(0);
+    }
+
+    public String getInput() {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter \"start\" or \"exit\"");
+        return in.nextLine();
     }
 
 }

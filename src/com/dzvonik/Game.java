@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Game {
 
+    private Words words;
     private Renderer renderer;
     private int mistakes;
     private String word;
@@ -14,7 +15,7 @@ public class Game {
     private Map<Character, Boolean> usedLetters;
 
     public Game() {
-        Words words = new Words();
+        this.words = new Words();
         this.renderer = new Renderer();
         this.word = words.getRandom();
         this.currentWordState = words.encryptWord(word);
@@ -23,6 +24,7 @@ public class Game {
     }
 
     public void startGame() {
+        initialize();
         String input = renderer.getInput();
 
         switch (input) {
@@ -43,7 +45,10 @@ public class Game {
                     makeGuess(inputLetter);
                     renderer.printGameState(mistakes, currentWordState.toString());
 
-                    renderer.printLoseOrWin(isGameOver());
+                    if (isGameOver() == -1 || isGameOver() == 1) {
+                        renderer.printLoseOrWin(isGameOver());
+                        startGame();
+                    }
                 }
 
                 break;
@@ -54,6 +59,13 @@ public class Game {
                 break;
         }
 
+    }
+
+    private void initialize() {
+        mistakes = 0;
+        word = words.getRandom();
+        currentWordState = words.encryptWord(word);
+        usedLetters = initUsedLetters();
     }
 
     public void makeGuess(char letter) {

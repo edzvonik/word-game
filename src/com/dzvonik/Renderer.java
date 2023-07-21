@@ -24,6 +24,7 @@ public class Renderer {
         } else if (state == 1) {
             System.out.println("You`re win!");
         }
+        printDelimiter();
     }
 
     public void printGameState(int mistakes, String currentWordState) {
@@ -39,7 +40,8 @@ public class Renderer {
 
     public String getInput() {
         Scanner in = new Scanner(System.in);
-        System.out.println("Enter \"start\" or \"exit\"");
+        System.out.println("New game?");
+        System.out.println("Type \"start\" or \"exit\"");
         return in.nextLine();
     }
 
